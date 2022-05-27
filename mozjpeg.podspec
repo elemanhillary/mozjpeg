@@ -153,7 +153,8 @@ Pod::Spec.new do |spec|
                       "turbojpeg.h",
                       "wrppm.h",
                       "tjutil.h",
-                      "jversion.h"
+                      "jversion.h",
+                      "jdmerge.h"
 
   # Despite their extensions, these are header files that shouldn't be compiled
   # on their own but should still be present for other files to include.
