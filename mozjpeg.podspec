@@ -66,6 +66,7 @@ Pod::Spec.new do |spec|
                              "jmorecfg.h",
                              "jpeglib.h",
                              "jpegint.h",
+                             "turbojpeg.h"
                              "transupp.h"
 
   spec.source_files = "jcapimin.c",
@@ -120,6 +121,7 @@ Pod::Spec.new do |spec|
                       "transupp.c",
                       "jmemnobs.c",
                       "jsimd_none.c",
+                      "turbojpeg.c"
                       "jerror.h",
                       "jinclude.h",
                       "jconfig.h",
@@ -145,6 +147,7 @@ Pod::Spec.new do |spec|
                       "jsimd.h",
                       "jsimddct.h",
                       "jversion.h",
+                      "turbojpeg.h"
                       "wrppm.h"
 
   # Despite their extensions, these are header files that shouldn't be compiled
