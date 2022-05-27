@@ -69,6 +69,7 @@ Pod::Spec.new do |spec|
                              "turbojpeg.h",
                              "transupp.h",
                              "tjutil.h"
+                             "jdmerge.h"
 
   spec.source_files = "jcapimin.c",
                       "jcapistd.c",
