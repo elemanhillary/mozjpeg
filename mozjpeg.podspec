@@ -150,7 +150,7 @@ Pod::Spec.new do |spec|
                       "jsimd.h",
                       "jsimddct.h",
                       "jversion.h",
-                      # "turbojpeg.h",
+                      "turbojpeg.h",
                       "wrppm.h",
                       "tjutil.h",
                       "jversion.h",
