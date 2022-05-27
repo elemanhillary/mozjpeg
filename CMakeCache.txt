@@ -14,7 +14,7 @@
 # EXTERNAL cache entries
 ########################
 
-//Build string (default: 20220527)
+//Build string (default: 20220528)
 BUILD:STRING=10000
 
 //Path to a program.
