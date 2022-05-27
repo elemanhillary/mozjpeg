@@ -1,5 +1,5 @@
 /*
- * Copyright (C)2009-2019, 2021-2022 D. R. Commander.  All Rights Reserved.
+ * Copyright (C)2009-2019 D. R. Commander.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,10 +25,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,10 +61,8 @@ int tjErrorLine = -1, tjErrorCode = -1;
     if (strncmp(tjErrorStr, _tjErrorStr, JMSG_LENGTH_MAX) || \
         strncmp(tjErrorMsg, m, JMSG_LENGTH_MAX) || \
         tjErrorCode != _tjErrorCode || tjErrorLine != __LINE__) { \
-      strncpy(tjErrorStr, _tjErrorStr, JMSG_LENGTH_MAX); \
-      tjErrorStr[JMSG_LENGTH_MAX - 1] = '\0'; \
-      strncpy(tjErrorMsg, m, JMSG_LENGTH_MAX); \
-      tjErrorMsg[JMSG_LENGTH_MAX - 1] = '\0'; \
+      strncpy(tjErrorStr, _tjErrorStr, JMSG_LENGTH_MAX - 1); \
+      strncpy(tjErrorMsg, m, JMSG_LENGTH_MAX - 1); \
       tjErrorCode = _tjErrorCode; \
       tjErrorLine = __LINE__; \
       printf("WARNING in line %d while %s:\n%s\n", __LINE__, m, _tjErrorStr); \
@@ -292,17 +286,16 @@ static int decomp(unsigned char *srcBuf, unsigned char **jpegBuf,
 
           if (y > 255) y = 255;
           if (y < 0) y = 0;
-          dstBuf[rindex] = (unsigned char)abs(dstBuf[rindex] - y);
-          dstBuf[gindex] = (unsigned char)abs(dstBuf[gindex] - y);
-          dstBuf[bindex] = (unsigned char)abs(dstBuf[bindex] - y);
+          dstBuf[rindex] = abs(dstBuf[rindex] - y);
+          dstBuf[gindex] = abs(dstBuf[gindex] - y);
+          dstBuf[bindex] = abs(dstBuf[bindex] - y);
         }
       }
     } else {
       for (row = 0; row < h; row++)
         for (col = 0; col < w * ps; col++)
           dstBuf[pitch * row + col] =
-            (unsigned char)abs(dstBuf[pitch * row + col] -
-                               srcBuf[pitch * row + col]);
+            abs(dstBuf[pitch * row + col] - srcBuf[pitch * row + col]);
     }
     if (tjSaveImage(tempStr, dstBuf, w, 0, h, pf, flags) == -1)
       THROW_TJG("saving bitmap");
@@ -692,7 +685,7 @@ static int decompTest(char *fileName)
                sigfig((double)(w * h * ps) / (double)totalJpegSize, 4,
                       tempStr2, 80),
                quiet == 2 ? "\n" : "  ");
-      } else {
+      } else if (!quiet) {
         printf("Transform     --> Frame rate:         %f fps\n",
                1.0 / elapsed);
         printf("                  Output image size:  %lu bytes\n",
@@ -807,8 +800,6 @@ static void usage(char *progName)
   printf("-componly = Stop after running compression tests.  Do not test decompression.\n");
   printf("-nowrite = Do not write reference or output images (improves consistency of\n");
   printf("     performance measurements.)\n");
-  printf("-limitscans = Refuse to decompress or transform progressive JPEG images that\n");
-  printf("     have an unreasonably large number of scans\n");
   printf("-stoponwarning = Immediately discontinue the current\n");
   printf("     compression/decompression/transform operation if the underlying codec\n");
   printf("     throws a warning (non-fatal error)\n\n");
@@ -964,8 +955,6 @@ int main(int argc, char *argv[])
         compOnly = 1;
       else if (!strcasecmp(argv[i], "-nowrite"))
         doWrite = 0;
-      else if (!strcasecmp(argv[i], "-limitscans"))
-        flags |= TJFLAG_LIMITSCANS;
       else if (!strcasecmp(argv[i], "-stoponwarning"))
         flags |= TJFLAG_STOPONWARNING;
       else usage(argv[0]);
