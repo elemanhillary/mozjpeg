@@ -25,20 +25,17 @@ if [ "$ARCH" = "armv7" ]; then
   cmake -G"Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_OSX_SYSROOT=${IOS_SYSROOT[0]} -DPNG_SUPPORTED=FALSE -DENABLE_SHARED=FALSE -DWITH_JPEG8=1 -DBUILD=10000 ../mozjpeg
   make
 elif [ "$ARCH" = "arm64" ]; then
-  IOS_PLATFORMDIR="$(xcode-select -p)/Platforms/iPhoneOS.platform"
-  IOS_SYSROOT=($IOS_PLATFORMDIR/Developer/SDKs/iPhoneOS*.sdk)
+  IOS_PLATFORMDIR="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform"
+  IOS_SYSROOT=($IOS_PLATFORMDIR/Developer/SDKs/iPhoneOS.sdk)
+  IOS_GCC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
   export CFLAGS="-Wall -arch arm64 -miphoneos-version-min=9.0 -funwind-tables"
-
-  # cd "$BUILD_DIR"
-  # mkdir build
-  # cd build
 
   touch toolchain.cmake
   echo "set(CMAKE_SYSTEM_NAME Darwin)" >> toolchain.cmake
   echo "set(CMAKE_SYSTEM_PROCESSOR aarch64)" >> toolchain.cmake
-  echo "set(CMAKE_C_COMPILER $(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang)" >> toolchain.cmake
+  echo "set(CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang)" >> toolchain.cmake
 
-  cmake -G"Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_OSX_SYSROOT=${IOS_SYSROOT[0]} -DPNG_SUPPORTED=FALSE -DENABLE_SHARED=FALSE -DWITH_JPEG8=1 -DBUILD=10000 ../mozjpeg
+  cmake -G"Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_OSX_SYSROOT=${IOS_SYSROOT[0]} -DPNG_SUPPORTED=FALSE -DENABLE_SHARED=FALSE -DWITH_JPEG8=1 -DBUILD=10000 .
   make
 elif [ "$ARCH" = "sim_arm64" ]; then
   IOS_PLATFORMDIR="$(xcode-select -p)/Platforms/iPhoneSimulator.platform"
