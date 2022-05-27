@@ -35,10 +35,10 @@
 
 #if defined(__has_attribute)
 #if __has_attribute(fallthrough)
-#define FALLTHROUGH  __attribute__((fallthrough));
+#define   __attribute__((fallthrough));
 #else
-#define FALLTHROUGH
+#define 
 #endif
 #else
-#define FALLTHROUGH
+#define 
 #endif
